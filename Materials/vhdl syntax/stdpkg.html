@@ -1,0 +1,163 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>Standard VHDL Packages</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> Standard VHDL Packages </h2>
+
+
+<h3><a name="pkg"> VHDL standard packages and types </a></h3>
+<pre>  The following packages should be installed along with the VHDL
+  compiler and simulator.  The packages that you need,
+  except for "standard", must be specifically accessed by each of
+  your source files with statements such as:
+
+        <b>library</b> IEEE;
+        <b>use</b> IEEE.std_logic_1164.<b>all</b>;
+        <b>use</b> IEEE.std_logic_textio.<b>all</b>;
+        <b>use</b> IEEE.std_logic_arith.<b>all</b>;
+        <b>use</b> IEEE.numeric_bit.<b>all</b>;
+        <b>use</b> IEEE.numeric_std.<b>all</b>;
+        <b>use</b> IEEE.std_logic_signed.<b>all</b>;
+        <b>use</b> IEEE.std_logic_unsigned.<b>all</b>;
+        <b>use</b> IEEE.math_real.<b>all</b>;
+        <b>use</b> IEEE.math_complex.<b>all</b>;
+
+        library STD;
+        use STD.textio;
+
+  A version of these packages, declaration and body, are in
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages">this directory</a>
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/standard.vhdl"> standard </a> is predefined in the compiler.
+  Types defined include:  bit      bit_vector             typical signals
+                          integer  natural  positive      typical variables
+                          boolean  string   character     typical variables
+                          real     time     delay_length  typical variables
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/standard.vhdl">standard</a> to see the functions defined
+  Note: This package must be provided with compiler, do not use this one.
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/textio.vhdl"> textio </a> provides user input/output
+  Types defined include:     line       text   side    width
+  Functions defined include: readline   read
+                             writeline  write  endline
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/textio.vhdl">textio</a> to see how to call the functions
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/std_logic_1164.vhd"> std_logic_1164 </a> provides enhanced signal types
+  Types defined include:   std_ulogic   std_ulogic_vector
+                           std_logic    std_logic_vector
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/std_logic_1164.vhdl">std_logic_1164</a> to see available functions
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/std_logic_textio.vhd"> std_logic_textio </a> provides input/output for 1164 types
+  Functions defined include: readline   read
+                             writeline  write  endline
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/std_logic_textio.vhdl">std_logic_textio</a> to see how to call the functions
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/std_logic_arith_syn.vhd"> std_logic_arith </a> provides numerical computation
+  This package name unfortunately seams to have several definitions:
+
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/std_logic_arith_syn.vhd">std_logic_arith_syn.vhd</a>
+  defines types  signed  and  unsigned  and
+  has arithmetic functions that operate on signal types
+  signed  and  unsigned  and  std_logic_vector  and  std_ulogic_vector,
+  but adding  A to B of std_logic_vector type, needs  
+  unsigned(A) + unsigned(B).
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/std_logic_arith_syn.vhdl">std_logic_arith_syn</a> to see the functions defined
+
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/std_logic_arith_ex.vhd">std_logic_arith_ex.vhd</a>
+  has arithmetic functions that operate on signal types
+  std_logic_vector  and  std_ulogic_vector
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/std_logic_arith_ex.vhdl">std_logic_arith_ex</a> to see the functions defined
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/numeric_bit.vhd"> numeric_bit </a> provides numerical computation
+  Types defined include:  unsigned  signed   arrays of type bit for signals
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/numeric_bit.vhdl">numeric_bit</a> to see the functions defined
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/numeric_std.vhd"> numeric_std </a> provides numerical computation
+  Types defined include: unsigned  signed  arrays of type std_logic for signals
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/numeric_std.vhdl">numeric_std</a> to see the functions defined
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/std_logic_signed.vhd"> std_logic_signed </a> provides signed numerical computation
+  on type std_logic_vector
+
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/std_logic_signed.vhdl">std_logic_signed</a> to see the functions defined
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/std_logic_unsigned.vhd"> std_logic_unsigned </a> provides unsigned numerical computation
+  on type std_logic_vector
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/std_logic_unsigned.vhdl">std_logic_unsigned</a> to see the functions defined
+
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/mathpack.vhd"> math_real </a> provides numerical computation
+  on type real
+
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/math_real.vhdl">math_real</a> to see the functions defined
+  This declaration and body are in <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/mathpack.vhd">mathpack</a>
+
+The package <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/mathpack.vhd"> math_complex </a> provides numerical computation
+  Types defined include: complex, complex_vector, complex_polar
+
+  Click on <a href="http://www.cs.umbc.edu/portal/help/VHDL/math_complex.vhdl">math_complex</a> to see the functions defined
+  This declaration and body are in <a href="http://www.cs.umbc.edu/portal/help/VHDL/packages/mathpack.vhd">mathpack</a>
+
+
+</pre>
+
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

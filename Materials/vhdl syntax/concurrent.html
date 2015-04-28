@@ -1,0 +1,333 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Concurrent Statements</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Concurrent Statements </h2>
+
+<h4><pre>These statements are for use in Architectures.</pre></h4>
+
+<h3> Concurrent Statements </h3>
+<dir>
+  <li><a href="#bloc"> block statement </a>
+  </li><li><a href="#proc"> process statement </a>
+  </li><li><a href="#cpro"> concurrent procedure call statement </a>
+  </li><li><a href="#asse"> concurrent assertion statement </a>
+  </li><li><a href="#sign"> concurrent signal assignment statement </a>
+  </li><li><a href="#cond"> conditional signal assignment statement </a>
+  </li><li><a href="#sele"> selected signal assignment statement </a>
+  </li><li><a href="#inst"> component instantiation statement </a>
+  </li><li><a href="#gene"> generate statement </a>
+</li></dir>
+
+<h3><a name="bloc"> block statement </a></h3>
+<pre>Used to group concurrent statements, possibly hierarchically.
+
+  label : <b>block</b> [ ( guard expression ) ] [ <b>is</b> ]
+             [ generic clause [ generic map aspect ; ] ]
+             [ port clause [ port map aspect ; ] ]
+             [ block declarative items ]
+          <b>begin</b>
+             concurrent statements
+          <b>end</b> <b>block</b> [ label ] ;
+
+  clump : <b>block</b>
+          <b>begin</b>
+            A &lt;= B <b>or</b> C;
+            D &lt;= B <b>and</b> <b>not</b> C;
+          <b>end</b> <b>block</b> clump ;
+
+  maybe : <b>block</b> ( B'stable(5 ns) ) <b>is</b>
+             <b>port</b> (A, B, C : <b>inout</b> std_logic );
+             <b>port</b> <b>map</b> ( A =&gt; S1, B =&gt; S2, C =&gt; outp );
+             <b>constant</b> delay: time := 2 ns;
+             <b>signal</b> temp: std_logic;
+          <b>begin</b>
+             temp &lt;= A <b>xor</b> B <b>after</b> delay;
+             C &lt;= temp <b>nor</b> B;
+          <b>end</b> <b>block</b> maybe; 
+
+</pre>
+
+<h3><a name="proc"> process statement </a></h3>
+<pre>Used to do have sequential statements be a part of concurrent processing.
+
+  label : <b>process</b> [ ( sensitivity_list ) ] [ <b>is</b> ]
+             [ process_declarative_items ]
+          <b>begin</b>
+             sequential statements
+          <b>end</b> <b>process</b> [ label ] ;
+
+         -- input and output are defined a type 'word' signals
+  reg_32: <b>process</b>(clk, clear)
+          <b>begin</b>
+            <b>if</b> clear='1' <b>then</b>
+              output &lt;= (<b>others</b>=&gt;'0');
+            <b>elsif</b> clk='1' <b>then</b>
+              output &lt;= input <b>after</b> 250 ps;
+            <b>end if</b>;
+          <b>end process</b> reg_32;
+
+           -- assumes  use IEEE.std_logic_textio.all
+  printout:  <b>process</b>(clk) -- used to show state when clock raises
+               <b>variable</b> my_line : LINE;   -- not part of working circuit
+             <b>begin</b>
+               <b>if</b> clk='1' <b>then</b>
+                 write(my_line, string'("at clock "));
+                 write(my_line, counter);
+                 write(my_line, string'("  PC="));
+                 write(my_line, IF_PC);
+                 writeline(output, my_line);
+                 counter &lt;= counter+1;
+               <b>end if</b>;
+             <b>end process</b> printout;
+
+
+  process_declarative_items are any of:
+  <a href="#subpr">subprogram declaration</a>
+  <a href="#subpr">subprogram body</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#Top">type declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sutype">subtype declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#cobj">constant, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#vobj">variable, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#fobj">file, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#alias">alias declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrd">attribute declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrs">attribute specification</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#groupt">group template declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+
+  BUT NOT signal_declaration, all signals must be declared outside the process.
+    sig1 &lt;= sig2 and sig3; -- considered here as a sequential statement
+                          -- sig1 is set outside the process upon exit or wait
+
+A process may be designated as <b>postponed</b> in which case it starts in the 
+same simulation cycle as an equivalent non postponed process,
+yet starts after all other non postponed processes have suspended
+in that simulation cycle.
+
+</pre>
+
+<h3><a name="cpro"> concurrent procedure call statement </a></h3>
+<pre>A sequential procedure call statement may be used and its behavior
+is that of an equivalent process. 
+
+  [ label : ] [ <b>postponed</b> ] procedure name [ ( actual_parameters ) ] ;
+
+  trigger_some_event ;
+
+  Check_Timing(min_time, max_time, clk, sig_to_test);
+
+Note that a procedure can be defined in a library package and
+then used many places.  A process can not be similarly defined
+in a package and may have to be physically copied.  A process
+has some additional capability not available in a concurrent
+procedure.
+
+</pre>
+
+<h3><a name="asse"> concurrent assertion statement </a></h3>
+<pre>A sequential assertion statement may be used and its behavior is that
+of an equivalent process.
+
+  [ label : ] [ <b>postponed</b> ] assertion_statement ;
+
+
+</pre>
+
+<h3><a name="sign"> concurrent signal assignment statement </a></h3>
+<pre>A <a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html#sign">sequential signal assignment statement</a> is also a concurrent signal
+assignment statement. Additional control is provided by the use
+of <b>postponed</b> and <b>guarded</b>.
+
+  [ label : ] <a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html#sign">sequential signal assignment statement</a>
+
+  [ label : ] [ <b>postponed</b> ] conditional_signal_assignment_statement ;
+
+  [ label : ] [ <b>postponed</b> ] selected_signal_assignment_statement ;
+
+
+The optional <b>guarded</b> causes the statement to be executed when
+the <b>guarded</b> signal changes from False to True.
+</pre>
+
+
+<h3><a name="cond"> conditional signal assignment statement </a></h3>
+<pre>A conditional assignment statement is also a concurrent signal
+assignment statement.
+
+  target &lt;= waveform <b>when</b> choice; -- choice is a boolean expression
+  target &lt;= waveform <b>when</b> choice <b>else</b> waveform;
+
+  sig &lt;= a_sig <b>when</b> count&gt;7;
+  sig2 &lt;= not a_sig after 1 ns <b>when</b> ctl='1' <b>else</b> b_sig;
+
+  "waveform" for this statement seems to include [ delay_mechanism ]
+  See <a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html#sign">sequential signal assignment statement</a>
+
+</pre>
+
+
+<h3><a name="sele"> selected signal assignment statement </a></h3>
+<pre>A selected assignment statement is also a concurrent signal
+assignment statement.
+
+  <b>with</b> expression <b>select</b> target &lt;=
+             waveform <b>when</b> choice [, waveform <b>when</b> choice ] ;
+
+  <b>with</b> count/2 <b>select</b> my_ctrl &lt;=
+                 '1' <b>when</b> 1, -- count/2 = 1 for this choice
+                 '0' <b>when</b> 2,
+                 'X' <b>when</b> <b>others</b>;
+
+</pre>
+
+
+<h3><a name="inst"> component instantiation statement </a></h3>
+<pre>Get a specific architecture-entity instantiated component.
+
+  part_name: <b>entity</b>  library_name.entity_name(architecture_name)
+             <b>port map</b> ( actual arguments ) ;
+
+                                              optional (architecture_name)
+  part_name: component_name
+             <b>port map</b> ( actual arguments ) ;
+
+
+  Given  <b>entity</b> gate <b>is</b>
+            <b>port</b> (in1  : <b>in</b>  std_logic ;
+                  in2  : <b>in</b>  std_logic ;
+                  out1 : <b>out</b> std_logic) ;
+         <b>end entity</b> gate;
+         <b>architecture</b> circuit <b>of</b> gate <b>is</b> ...
+         <b>architecture</b> behavior <b>of</b> gate <b>is</b> ...
+
+  A101: <b>entity</b> WORK.gate(circuit)
+            <b>port map</b> ( in1 =&gt; a, in2 =&gt; b, out1 =&gt; c );
+
+        -- when gate has only one architecture
+  A102: <b>entity</b> WORK.gate
+            <b>port map</b> ( in1 =&gt; a, in2 =&gt; b, out1 =&gt; c );
+
+        -- when order of actual arguments is used
+  A103: <b>entity</b> WORK.gate
+            <b>port map</b> ( a, b, c );
+
+  Given an entity
+  <b>entity</b> add_32 <b>is</b> -- could have several architectures
+      <b>port</b> (a    : <b>in</b>  std_logic_vector (31 <b>downto</b> 0);
+            b    : <b>in</b>  std_logic_vector (31 <b>downto</b> 0);
+            cin  : <b>in</b>  std_logic;
+            sum  : <b>out</b> std_logic_vector (31 <b>downto</b> 0);
+            cout : <b>out</b> std_logic);
+  <b>end entity</b> add_32;
+
+  Create a simple component interface
+  <b>component</b> add_32 -- use same port as entity
+      <b>port</b> (a    : <b>in</b>  std_logic_vector (31 <b>downto</b> 0);
+            b    : <b>in</b>  std_logic_vector (31 <b>downto</b> 0);
+            cin  : <b>in</b>  std_logic;
+            sum  : <b>out</b> std_logic_vector (31 <b>downto</b> 0);
+            cout : <b>out</b> std_logic);
+  <b>end component </b>add_32;
+
+  Instantiate the component 'add_32' to part name 'PC_incr'
+  PC_incr : add_32 <b>port map</b> (PC, four, zero, PC_next, nc1);
+
+
+  Create a component interface, changing name and renaming arguments
+  <b>component</b> adder  -- can have any name but same types in port
+      <b>port</b> (in1  : <b>in</b>  std_logic_vector (31 <b>downto</b> 0);
+            in2  : <b>in</b>  std_logic_vector (31 <b>downto</b> 0);
+            cin  : <b>in</b>  std_logic;
+            sum  : <b>out</b> std_logic_vector (31 <b>downto</b> 0);
+            cout : <b>out</b> std_logic);
+  <b>end component </b>adder;
+
+  Instantiate the component 'adder' to part name 'PC_incr'
+  PC_incr : adder  -- configuration may associate a specific architecture
+            <b>port map</b> (in1  =&gt; PC,
+                      in2  =&gt; four,
+                      cin  =&gt; zero,
+                      sum  =&gt; PC_next,
+                      cout =&gt; nc1);
+
+</pre>
+
+<h3><a name="gene"> generate statement </a></h3>
+<pre>Make copies of concurrent statements
+
+  label: <b>for</b> variable <b>in</b> range <b>generate</b>    -- label required
+            block declarative items  \__ optional   
+         <b>begin</b>                       /
+            concurrent statements          -- using variable
+         <b>end</b> <b>generate</b> label ;
+
+  label: <b>if</b> condition <b>generate</b>            -- label required
+            block declarative items  \__ optional   
+         <b>begin</b>                       /
+            concurrent statements
+         <b>end</b> <b>generate</b> label ;
+
+  band : <b>for</b> I <b>in</b> 1 <b>to</b> 10 <b>generate</b>
+  b2 :      <b>for</b> J <b>in</b> 1 <b>to</b> 11 <b>generate</b>
+  b3 :         <b>if</b> <b>abs</b>(I-J)&lt;2 <b>generate</b>
+                   part: foo <b>port</b> <b>map</b> ( a(I), b(2*J-1), c(I, J) );
+               <b>end</b> <b>generate</b> b3;
+            <b>end</b> <b>generate</b> b2;
+         <b>end</b> <b>generate</b> band;
+
+</pre>
+
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

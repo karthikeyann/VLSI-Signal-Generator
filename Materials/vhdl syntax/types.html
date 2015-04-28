@@ -1,0 +1,169 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Predefined Types</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Predefined Types from the package standard </h2>
+
+<pre>The type and subtype names below are automatically defined.
+They are not technically reserved words but save yourself a lot
+of grief and do not re-define them.
+
+Note that enumeration literals such as "true" and "false"
+are not technically reserver words and can be easily overloaded,
+but save future readers of your code the confusion.
+It is confusing enough that '0' and '1' are enumeration
+literals of both type Character and type Bit.
+"01101001" is of type string, bit_vector, std_logic_vector and more.
+
+There is no automatic type conversion in VHDL, yet users and libraries
+may provide almost any type conversion. For numeric types
+integer(X) yields the rounded value of the real variable X as an integer,
+real(I) yields the value of the integer variable I as a real.
+
+</pre>
+
+<h3><a name="Top"> Predefined type declarations </a></h3>
+
+<pre>
+Notes: Reserver words are in bold type,
+Type names are alphabetical and begin with an initial uppercase letter.
+Enumeration literals are in plain lower case.
+
+<b>type</b> Bit <b>is</b> ('0', '1');
+
+<b>type</b> Bit_vector <b>is</b> <b>array</b> (Natural <b>range</b> &lt;&gt;) <b>of</b> Bit;
+
+<b>type</b> Boolean <b>is</b> (false, true);
+
+<b>type</b> Character <b>is</b> ( --256 characters-- );
+
+<b>subtype</b> Delay_length <b>is</b> Time <b>range</b> 0 fs <b>to</b> Time'high;
+
+<b>type</b> File_open_kind <b>is</b> (read_mode, write_mode, append_mode);
+
+<b>type</b> File_open_status <b>is</b> (open_ok, status_error, name_error, mode_error);
+
+<b>type</b> Integer <b>is</b> <b>range</b> --usually typical integer-- ;
+
+<b>subtype</b> Natural <b>is</b> Integer <b>range</b> 0 <b>to</b> Integer'high;
+
+<b>subtype</b> Positive <b>is</b> Integer <b>range</b> 1 <b>to</b> Integer'high;
+
+<b>type</b> Real <b>is</b> <b>range</b> --usually double precision floating point-- ;
+
+<b>type</b> Severity_level <b>is</b> (note, warning, error, failure);
+
+<b>type</b> String <b>is</b> <b>array</b> (Positive <b>range</b> &lt;&gt;) <b>of</b> Character;
+
+<b>type</b> Time <b>is</b> <b>range</b> --implementation defined-- ;
+  <b>units</b>
+     fs;            -- femtosecond
+     ps  = 1000 fs; -- picosecond
+     ns  = 1000 ps; -- nanosecond
+     us  = 1000 ns; -- microsecond
+     ms  = 1000 us; -- millisecond
+     sec = 1000 ms; -- second
+     min = 60  sec; -- minute
+     hr  = 60  min; -- hour
+  <b>end</b> <b>units</b>;
+
+
+<b>attribute</b> Foreign : String ;
+
+<b>impure</b> <b>function</b> Now <b>return</b> Delay_length;
+
+The type classification of VHDL is shown below.
+  Users can declare their own types and subtypes.
+  A <b>type</b> statement is used to declare a new type.
+  A <b>subtype</b> statement is used to constrain an existing type.
+
+types-+-scalar----+-discrete-------+-integer-------+-integer
+      |           |                |               +-natural
+      |           |                |               +-positive
+      |           |                |
+      |           |                +-enumeration---+-boolean
+      |           |                                +-bit
+      |           |                                +-character
+      |           |                                +-file_open_kind
+      |           |                                +-file_open_status
+      |           |                                +-severity_level
+      |           |
+      |           +-floating point-+-----------------real
+      |           |
+      |           +-physical-------+-----------------delay_length
+      |                            +-----------------time
+      |
+      +-composite-+-array----------+-constrained-
+      |           |                |
+      |           |                +-unconstrained-+-bit_vector
+      |           |                                +-string
+      |           |
+      |           +-record-
+      |
+      +-access-
+      |
+      +-file-
+
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

@@ -1,0 +1,116 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Predefined Attributes</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Predefined Attributes </h2>
+<pre> The syntax of an attribute is some named entity followed
+ by an apostrophe and one of the following attribute names.
+ A parameter list is used with some attributes.
+ Generally: T represents any type, A represents any array 
+ or constrained array type, S represents any signal and
+ E represents a named entity.
+
+</pre>
+
+<pre>
+T'BASE       is the base type of the type T
+T'LEFT       is the leftmost value of type T. (Largest if downto)
+T'RIGHT      is the rightmost value of type T. (Smallest if downto)
+T'HIGH       is the highest value of type T.
+T'LOW        is the lowest value of type T.
+T'ASCENDING  is boolean true if range of T defined with <b>to</b> .
+T'IMAGE(X)   is a string representation of X that is of type T.
+T'VALUE(X)   is a value of type T converted from the string X.
+T'POS(X)     is the integer position of X in the discrete type T.
+T'VAL(X)     is the value of discrete type T at integer position X.
+T'SUCC(X)    is the value of discrete type T that is the successor of X.
+T'PRED(X)    is the value of discrete type T that is the predecessor of X.
+T'LEFTOF(X)  is the value of discrete type T that is left of X.
+T'RIGHTOF(X) is the value of discrete type T that is right of X.
+A'LEFT       is the leftmost subscript of array A or constrained array type.
+A'LEFT(N)    is the leftmost subscript of dimension N of array A.
+A'RIGHT      is the rightmost subscript of array A or constrained array type.
+A'RIGHT(N)   is the rightmost subscript of dimension N of array A.
+A'HIGH       is the highest subscript of array A or constrained array type.
+A'HIGH(N)    is the highest subscript of dimension N of array A.
+A'LOW        is the lowest subscript of array A or constrained array type.
+A'LOW(N)     is the lowest subscript of dimension N of array A.
+A'RANGE      is the range  A'LEFT <b>to</b> A'RIGHT  or  A'LEFT <b>downto</b> A'RIGHT .
+A'RANGE(N)   is the range of dimension N of A.
+A'REVERSE_RANGE  is the range of A with <b>to</b> and <b>downto</b> reversed.
+A'REVERSE_RANGE(N)  is the REVERSE_RANGE of dimension N of array A.
+A'LENGTH     is the integer value of the number of elements in array A.
+A'LENGTH(N)  is the number of elements of dimension N of array A.
+A'ASCENDING  is boolean <b>true</b> if range of A defined with <b>to</b> .
+A'ASCENDING(N)  is boolean <b>true</b> if dimension N of array A defined with <b>to</b> .
+S'DELAYED(t) is the signal value of S at time now - t .
+S'STABLE     is true if no event is occurring on signal S.
+S'STABLE(t)  is true if no even has occurred on signal S for t units of time.
+S'QUIET      is true if signal S is quiet. (no event this simulation cycle)
+S'QUIET(t)   is true if signal S has been quiet for t units of time.
+S'TRANSACTION  is a bit signal, the inverse of previous value each cycle S is active.
+S'EVENT      is true if signal S has had an event this simulation cycle.
+S'ACTIVE     is true if signal S is active during current simulation cycle.
+S'LAST_EVENT is the time since the last event on signal S.
+S'LAST_ACTIVE  is the time since signal S was last active.
+S'LAST_VALUE is the previous value of signal S.
+S'DRIVING    is false only if the current driver of S is a null transaction.
+S'DRIVING_VALUE  is the current driving value of signal S.
+E'SIMPLE_NAME  is a string containing the name of entity E.
+E'INSTANCE_NAME  is a string containing the design hierarchy including E.
+E'PATH_NAME  is a string containing the design hierarchy of E to design root.
+
+</pre>
+
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

@@ -1,0 +1,310 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Sequential Statements</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Sequential Statements </h2>
+
+<h4><pre>These statements are for use in Processes, Procedures and Functions.
+The signal assignment statement has unique properties when used sequentially.</pre></h4>
+
+<h3><a name="Top"> Sequential Statements </a></h3>
+<dir>
+  <li><a href="#wait"> wait statement </a>
+  </li><li><a href="#asse"> assertion statement </a>
+  </li><li><a href="#repo"> report statement </a>
+  </li><li><a href="#sign"> signal assignment statement </a>
+  </li><li><a href="#vari"> variable assignment statement </a>
+  </li><li><a href="#proc"> procedure call statement </a>
+  </li><li><a href="#if"> if statement </a>
+  </li><li><a href="#case"> case statement </a>
+  </li><li><a href="#loop"> loop statement </a>
+  </li><li><a href="#next"> next statement </a>
+  </li><li><a href="#exit"> exit statement </a>
+  </li><li><a href="#retu"> return statement </a>
+  </li><li><a href="#null"> null statement </a>
+</li></dir>
+
+
+<h3><a name="wait"> wait statement </a></h3>
+<pre>Cause execution of sequential statements to wait.
+
+ [ label: ] <b>wait</b> [ sensitivity clause ] [ condition clause ] ;
+
+ <b>wait</b> <b>for</b> 10 ns;              -- timeout clause, specific time delay.
+ <b>wait</b> <b>until</b> clk='1';          -- condition clause, Boolean condition
+ <b>wait</b> <b>until</b> A&gt;B <b>and</b> S1 <b>or</b> S2; -- condition clause, Boolean condition
+ <b>wait</b> <b>on</b> sig1, sig2;          -- sensitivity clause, any event on any
+                              -- signal terminates wait
+
+</pre>
+
+<h3><a name="asse"> assertion statement </a></h3>
+<pre>Used for internal consistency check or error message generation.
+
+ [ label: ] <b>assert</b> boolean_condition [ <b>report</b> string ] [ <b>severity</b> name ] ;
+
+ <b>assert</b> a=(b <b>or</b> c);
+ <b>assert</b> j&lt;i <b>report</b> "internal error, tell someone";
+ <b>assert</b> clk='1' <b>report</b> "clock not up" <b>severity</b> WARNING;
+
+ predefined severity names are: NOTE, WARNING, ERROR, FAILURE
+ default severity for assert is ERROR
+
+</pre>
+
+<h3><a name="repo"> report statement </a></h3>
+<pre>Used to output messages.
+
+ [ label: ] <b>report</b> string [ <b>severity</b> name ] ;
+
+ <b>report</b>  "finished pass1";  -- default severity name is NOTE
+ <b>report</b>  "Inconsistent data." <b>severity</b> FAILURE;
+
+</pre>
+
+<h3><a name="sign"> signal assignment statement </a></h3>
+<pre>The signal assignment statement is typically considered a concurrent
+statement rather than a sequential statement. It can be used as
+a sequential statement but has the side effect of obeying the
+general rules for when the target actually gets updated.
+
+In particular, a signal can not be declared within a process or
+subprogram but must be declared is some other appropriate scope.
+Thus the target is updated in the scope where the target is declared
+when the sequential code reaches its end or encounters a 'wait'
+or other event that triggers the update.
+
+ [ label: ] target &lt;= [ delay_mechanism ] waveform ;
+
+  delay_mechanism
+    <b>transport</b>
+    <b>reject</b> time_expression
+    <b>inertial</b>
+
+  waveform
+    waveform_element [, waveform_element]
+    <b>unaffected</b>
+ 
+  waveform_element
+    value_expression [ <b>after</b> time_expression ]
+    <b>null</b> [ <b>after</b> time_expression ]
+
+
+  sig1 &lt;= sig2;
+  Sig &lt;= Sa <b>and</b> Sb <b>or</b> Sc <b>nand</b> Sd <b>nor </b>Se <b>xor</b> Sf <b>xnor</b> Sg;
+  sig1 &lt;= sig2 after 10 ns;
+  clk &lt;= '1' , '0' <b>after</b> TimePeriod/2 ; 
+  sig3 &lt;= <b>transport</b> sig4 after 3 ns;
+  sig4 &lt;= <b>reject</b> 2 ns sig5 after 3 ns; -- increasing time order
+  sig6 &lt;= <b>inertial</b> '1' after 2 ns, '0' after 3 ns , '1' after 7 ns;
+
+  Note: omitting  [ <b>after</b> time_expression ] is equivalent
+        to <b>after</b> 0 fs;
+
+ More information in <a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html#sign">Concurrent Statements signal assignment statement</a>.
+
+</pre>
+
+<h3><a name="vari"> variable assignment statement </a></h3>
+<pre>Assign the value of an expression to a target variable.
+
+ [ label: ] target := expression ;
+
+ A := -B + C * D / E <b>mod</b> F <b>rem</b> G <b>abs</b> H;
+ Sig := Sa <b>and</b> Sb <b>or</b> Sc <b>nand</b> Sd <b>nor </b>Se <b>xor</b> Sf <b>xnor</b> Sg;
+
+</pre>
+
+<h3><a name="proc"> procedure call statement </a></h3>
+<pre>Call a procedure.
+
+ [ label: ] procedure-name [ ( actual parameters ) ] ;
+
+ do_it;  -- no actual parameters
+
+ compute(stuff, A=&gt;a, B=&gt;c+d); -- positional association first,
+                                     -- then named association of
+                               -- formal parameters to actual parameters
+
+</pre>
+
+<h3><a name="if"> if statement </a></h3>
+<pre>Conditional structure.
+
+ [ label: ] <b>if</b>  condition1  <b>then</b>
+                 sequence-of-statements
+            <b>elsif</b>  condition2  <b>then</b>      \_ optional
+                 sequence-of-statements  /
+            <b>elsif</b>  condition3  <b>then</b>      \_ optional
+                 sequence-of-statements  /
+            ...
+
+            <b>else</b>                         \_ optional
+                 sequence-of-statements  /
+            <b>end</b> <b>if</b> [ label ] ;
+
+ <b>if</b> a=b <b>then</b>
+     c:=a;
+ <b>elsif</b> b&lt;c <b>then</b>
+     d:=b;
+     b:=c;
+ <b>else</b>
+     do_it;
+ <b>end</b> <b>if</b>;
+
+</pre>
+
+<h3><a name="case"> case statement </a></h3>
+<pre>Execute one specific case of an expression equal to a choice.
+The choices must be constants of the same discrete type as the expression.
+
+ [ label: ] <b>case</b>  expression  <b>is</b>
+              <b>when</b> choice1 =&gt;
+                 sequence-of-statements
+              <b>when</b> choice2 =&gt;            \_ optional
+                 sequence-of-statements  /
+              ...
+
+              <b>when</b> <b>others</b> =&gt;             \_ optional if all choices covered
+                 sequence-of-statements  /
+            <b>end</b> <b>case</b> [ label ] ;
+
+  <b>case</b>  my_val  <b>is</b>
+    <b>when</b> 1 =&gt;
+      a:=b;
+    <b>when</b> 3 =&gt;
+      c:=d;
+      do_it;
+    <b>when</b> <b>others</b> =&gt;
+      <b>null</b>;
+  <b>end</b> <b>case</b>;
+
+</pre>
+
+<h3><a name="loop"> loop statement </a></h3>
+<pre>Three kinds of iteration statements.
+
+ [ label: ] <b>loop</b>
+                 sequence-of-statements -- use exit statement to get out
+            <b>end</b> <b>loop</b> [ label ] ;
+
+ [ label: ] <b>for</b> variable <b>in</b> range <b>loop</b>
+                 sequence-of-statements
+            <b>end</b> <b>loop</b> [ label ] ;
+
+ [ label: ] <b>while</b>  condition  <b>loop</b>
+                 sequence-of-statements
+            <b>end</b> <b>loop</b> [ label ] ;
+
+  <b>loop</b>
+    input_something;
+    <b>exit</b> <b>when</b> end_file;
+  <b>end</b> <b>loop</b>;
+
+  <b>for</b> I <b>in</b> 1 <b>to</b> 10 <b>loop</b>
+    AA(I) := 0;
+  <b>end</b> <b>loop</b>;
+
+  <b>while</b> <b>not</b> end_file <b>loop</b>
+    input_something;
+  <b>end</b> <b>loop</b>;
+
+
+all kinds of the loops may contain the 'next' and 'exit' statements.
+
+</pre>
+
+<h3><a name="next"> next statement </a></h3>
+<pre>A statement that may be used in a loop to cause the next iteration.
+
+ [ label: ] <b>next</b> [ label2 ] [ <b>when</b> condition ] ;
+
+ <b>next</b>;
+ <b>next</b> outer_loop;
+ <b>next</b> <b>when</b> A&gt;B;
+ <b>next</b> this_loop <b>when</b> C=D <b>or</b> done; -- done is a Boolean variable
+
+</pre>
+
+<h3><a name="exit"> exit statement </a></h3>
+<pre>A statement that may be used in a loop to immediately exit the loop.
+
+ [ label: ] <b>exit</b> [ label2 ] [ <b>when</b> condition ] ;
+
+ <b>exit</b>;
+ <b>exit</b> outer_loop;
+ <b>exit</b> <b>when</b> A&gt;B;
+ <b>exit</b> this_loop <b>when</b> C=D <b>or</b> done; -- done is a Boolean variable
+
+</pre>
+
+<h3><a name="retu"> return statement </a></h3>
+<pre>Required statement in a function, optional in a procedure.
+
+ [ label: ] <b>return</b> [ expression ] ;
+
+ <b>return</b>; -- from somewhere in a procedure
+ <b>return</b> a+b; -- returned value in a function
+
+</pre>
+
+<h3><a name="null"> null statement </a></h3>
+<pre>Used when a statement is needed but there is nothing to do.
+
+ [ label: ] <b>null</b> ;
+
+ <b>null</b>;
+
+</pre>
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

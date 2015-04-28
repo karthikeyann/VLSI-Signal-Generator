@@ -1,0 +1,215 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Resolution and Signatures</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Resolution and Signatures </h2>
+
+<h3> Contents</h3>
+<dir>
+  <li><a href="#resf"> Resolution Functions </a>
+  </li><li><a href="#sign"> Signatures </a>
+  </li><li><a href="#attr"> 'left 'right vs 'high 'low </a>
+</li></dir>
+
+<h3><a name="resf"> Resolution Functions </a></h3>
+<pre>A resolution function defines how values from multiple sources,
+multiple drivers, are resolved into a single value.
+
+A type may be defined to have a resolution function. Every signal
+object of this type uses the resolution function when there are
+multiple drivers.
+
+A signal may be defined to use a specific resolution function.
+This signal uses the resolution function when there are multiple
+drivers.
+
+A resolution function must be a pure function that has a single
+input parameter of class <b>constant</b> that is a one dimensional
+unconstrained array of the type of the resolved signal.
+
+An example is from the package  std_logic_1164 :
+
+
+    <b>type</b> std_ulogic <b>is</b> ( 'U',  -- Uninitialized
+                         'X',  -- Forcing  Unknown
+                         '0',  -- Forcing  0
+                         '1',  -- Forcing  1
+                         'Z',  -- High Impedance   
+                         'W',  -- Weak     Unknown
+                         'L',  -- Weak     0       
+                         'H',  -- Weak     1       
+                         '-'   -- Don't care
+                       );
+
+    <b>type</b> std_ulogic_vector <b>is</b> <b>array</b> ( natural <b>range</b> &lt;&gt; ) <b>of</b> std_ulogic;
+                                    
+
+    -- resolution function
+
+    <b>function</b> resolved ( s : std_ulogic_vector ) <b>return</b> std_ulogic;
+        <b>variable</b> result : std_ulogic := 'Z';  -- weakest state default
+    <b>begin</b>
+        -- the test for a single driver is essential otherwise the
+        -- loop would return 'X' for a single driver of '-' and that
+        -- would conflict with the value of a single driver unresolved
+        -- signal.
+        <b>if</b>  s'length = 1 <b>then</b>
+            <b>return</b> s(s'low);
+        <b>else</b>
+            <b>for</b> i <b>in</b> s'range <b>loop</b>
+                result := resolution_table(result, s(i));
+            <b>end</b> <b>loop</b>;
+        <b>end</b> <b>if</b>;
+        <b>return</b> result;
+    <b>end</b> resolved;
+
+
+    <b>constant</b> resolution_table : stdlogic_table := (
+    --      ---------------------------------------------------------
+    --      |  U    X    0    1    Z    W    L    H    -        |   |  
+    --      ---------------------------------------------------------
+            ( 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U' ), -- | U |
+            ( 'U', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' ), -- | X |
+            ( 'U', 'X', '0', 'X', '0', '0', '0', '0', 'X' ), -- | 0 |
+            ( 'U', 'X', 'X', '1', '1', '1', '1', '1', 'X' ), -- | 1 |
+            ( 'U', 'X', '0', '1', 'Z', 'W', 'L', 'H', 'X' ), -- | Z |
+            ( 'U', 'X', '0', '1', 'W', 'W', 'W', 'W', 'X' ), -- | W |
+            ( 'U', 'X', '0', '1', 'L', 'W', 'L', 'W', 'X' ), -- | L |
+            ( 'U', 'X', '0', '1', 'H', 'W', 'W', 'H', 'X' ), -- | H |
+            ( 'U', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' )  -- | - |
+        );
+
+    
+    <b>subtype</b> std_logic <b>is</b> resolved std_ulogic;
+
+
+    <b>type</b> std_logic_vector <b>is</b> <b>array</b> ( natural <b>range</b> &lt;&gt;) <b>of</b> std_logic;
+
+    <b>signal</b> xyz : std_logic_vector(0 <b>to</b> 3);
+
+    xyz &lt;= -- some expression ;
+
+    xyz &lt;= -- some other expression ; -- a second driver
+                           -- each bit of  xyz  comes from function "resolved"
+
+</pre>
+
+<h3><a name="sign"> Signatures </a></h3>
+<pre>A signature distinguishes between overloaded subprograms and enumeration
+literals based on their parameter and result type profiles.
+A signature may be used in an attribute name, entity designator,
+or alias declaration.
+
+The syntax of the signature is
+
+  [ type_mark, type_mark, ... , type_mark <b>return</b> type_mark ]
+
+A signature used in an alias statement to give a shorthand to
+a textio procedure is:
+
+    <b>alias</b> swrite <b>is</b> write [line, string, side, width] ;
+
+allowing   swrite(output, "some text");  in place of
+           write(output, string'("some text"));
+
+The "[line, string, side, width]" is the signature to choose which
+of the overloaded  'write'  procedures to alias to 'swrite'.
+
+No <b>return</b> is used for procedures.
+The type marks are the parameter types in their defined order.
+The square brackets at beginning and end are part of the signature.
+The signature is used immediately after the subprogram or
+enumeration literal name.
+
+</pre>
+
+<h3><a name="attr">  'left 'right vs 'high 'low  </a></h3>
+<pre>This is just a specific example to help understand '<b>to</b>' vs '<b>downto</b>'
+and how the values of attributes such as 'left 'right and 'high 'low
+are determined.
+
+A : std_logic_vector(31 <b>downto</b> 0) := x"FEDCBA98"; -- '<b>downto</b>'
+B : std_logic_vector( 4 <b>to</b>    27) := x"654321";   -- '<b>to</b>'
+C       a literal constant                  x"321"
+
+Name  bitstring (attributes on following lines)
+
+ A    11111110110111001011101010011000
+      A'left=31     A'right=0      A'low=0      A'high=31
+      A(A'left)=1   A(A'right)=0   A(A'low)=0   A(A'high)=1
+      A'range=(31 downto 0)        A'reverse_range=(0 to 31) 
+      A'length=32                  A'ascending=false
+
+ B    011001010100001100100001                  B'ascending=true
+      B'left=4      B'right=27     B'low=4      B'high=27
+      B(B'left)=0   B(B'right)=1   B(B'low)=0   B(B'high)=1
+      B'range=(4 to 27)            B'reverse_range=(27 downto 4) 
+      B'length=24                  B'ascending=true
+
+ C    001100100001
+      C'left=0      C'right=11     C'low=0      C'high=11
+      C(C'left)=0   C(C'right)=1   C(C'low)=0   C(C'high)=1
+      C'range=(0 to 11)            C'reverse_range=(11 downto 0) 
+      C'length=12                  C'ascending=true
+
+      Notice the default values of attributes on literal constants.
+      Always a range of (0 to 'length-1)  'left  = 'low  = 0
+                                          'right = 'high = 'length-1
+</pre>
+
+
+
+
+
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

@@ -1,0 +1,156 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Reserved Words</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Reserved Words </h2>
+<pre><b>abs</b>           operator, absolute value of right operand. No () needed.
+<b>access</b>        used to define an access type, pointer
+<b>after</b>         specifies a time after NOW
+<b>alias</b>         create another name for an existing identifier
+<b>all</b>           dereferences what precedes the .all
+<b>and</b>           operator, logical "and" of left and right operands
+<b>architecture</b>  a secondary design unit
+<b>array</b>         used to define an array, vector or matrix
+<b>assert</b>        used to have a program check on itself
+<b>attribute</b>     used to declare attribute functions
+<b>begin</b>         start of a  <b>begin</b>  <b>end</b>  pair
+<b>block</b>         start of a block structure
+<b>body</b>          designates a procedure body rather than declaration
+<b>buffer</b>        a mode of a signal, holds a value
+<b>bus</b>           a mode of a signal, can have multiple drivers
+<b>case</b>          part of a case statement
+<b>component</b>     starts the definition of a component
+<b>configuration</b> a primary design unit
+<b>constant</b>      declares an identifier to be read only
+<b>disconnect</b>    signal driver condition
+<b>downto</b>        middle of a range  31 downto 0
+<b>else</b>          part of "if" statement, if cond then ... else ... end if;
+<b>elsif</b>         part of "if" statement, if cond then ... elsif cond ...
+<b>end</b>           part of many statements, may be followed by word and id
+<b>entity</b>        a primary design unit
+<b>exit</b>          sequential statement, used in loops
+<b>file</b>          used to declare a file type
+<b>for</b>           start of a for type loop statement
+<b>function</b>      starts declaration and body of a function
+<b>generate</b>      make copies, possibly using a parameter
+<b>generic</b>       introduces generic part of a declaration
+<b>group</b>         collection of types that can get an attribute
+<b>guarded</b>       causes a wait until a signal changes from False to True
+<b>if</b>            used in "if" statements
+<b>impure</b>        an impure function is assumed to have side effects
+<b>in</b>            indicates a parameter in only input, not changed
+<b>inertial</b>      signal characteristic, holds a value
+<b>inout</b>         indicates a parameter is used and computed in and out
+<b>is</b>            used as a connective in various statements
+<b>label</b>         used in attribute statement as entity specification
+<b>library</b>       context clause, designates a simple library name
+<b>linkage</b>       a mode for a port, used like <b>buffer</b> and <b>inout</b>
+<b>literal</b>       used in attribute statement as entity specification
+<b>loop</b>          sequential statement, loop ... end loop;
+<b>map</b>           used to map actual parameters, as in  port map
+<b>mod</b>           operator, left operand modulo right operand
+<b>nand</b>          operator, "nand" of left and right operands
+<b>new</b>           allocates memory and returns access pointer
+<b>next</b>          sequential statement, used in loops
+<b>nor</b>           operator, "nor" of left and right operands
+<b>not</b>           operator, complement of right operand
+<b>null</b>          sequential statement and a value
+<b>of</b>            used in type declarations, <b>of</b> Real ;
+<b>on</b>            used as a connective in various statements
+<b>open</b>          initial file characteristic
+<b>or</b>            operator, logical "or" of left and right operands
+<b>others</b>        fill in missing, possibly all, data
+<b>out</b>           indicates a parameter is computed and output
+<b>package</b>       a design unit, also  package body
+<b>port</b>          interface definition, also  port map
+<b>postponed</b>     make process wait for all non postponed process to suspend
+<b>procedure</b>     typical programming procedure
+<b>process</b>       sequential or concurrent code to be executed
+<b>pure</b>          a pure function may not have side effects
+<b>range</b>         used in type definitions, <b>range</b> 1 <b>to</b> 10;
+<b>record</b>        used to define a new record type
+<b>register</b>      signal parameter modifier
+<b>reject</b>        clause in delay mechanism, followed be a time
+<b>rem</b>           operator, remainder of left operand divided by right op
+<b>report</b>        statement and clause in assert statement, string output
+<b>return</b>        statement in procedure or function
+<b>rol</b>           operator, left operand rotated left by right operand
+<b>ror</b>           operator, left operand rotated right by right operand
+<b>select</b>        used in selected signal assignment statement
+<b>severity</b>      used in assertion and reporting, followed by a severity
+<b>signal</b>        declaration that an object is a signal
+<b>shared</b>        used to declare shared objects
+<b>sla</b>           operator, left operand shifted left arithmetic by right op
+<b>sll</b>           operator, left operand shifted left logical by right op
+<b>sra</b>           operator, left operand shifted right arithmetic by right
+<b>srl</b>           operator, left operand shifted right logical by right op
+<b>subtype</b>       declaration to restrict an existing type
+<b>then</b>          part of  if condition then ...
+<b>to</b>            middle of a range  1 to 10
+<b>transport</b>     signal characteristic
+<b>type</b>          declaration to create a new type
+<b>unaffected</b>    used in signal waveform
+<b>units</b>         used to define new types of units
+<b>until</b>         used in wait statement
+<b>use</b>           make a package available to this design unit
+<b>variable</b>      declaration that an object is a variable
+<b>wait</b>          sequential statement, also used in case statement
+<b>when</b>          used for choices in case and other statements
+<b>while</b>         kind of loop statement
+<b>with</b>          used in selected signal assignment statement          
+<b>xnor</b>          operator, exclusive "nor" of left and right operands
+<b>xor</b>           operator, exclusive "or" of left and right operands
+
+</pre>
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

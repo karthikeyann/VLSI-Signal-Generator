@@ -1,0 +1,616 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Design Units and Subprograms</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Design Units and Subprograms </h2>
+
+<pre>A design unit may be the entire file or there may be more than
+one design unit in a file. No less than a design unit may be
+in a file.
+
+Any design unit may contain a context clause as its initial part.
+The context clause of a primary unit applies to all of the
+primary units corresponding secondary units.  Architectures and
+package bodies are the secondary units. Subprograms are
+not library units and must be inside entities, architectures
+or packages.
+
+The analysis, compilation, of a design unit results in a library unit
+is some design library.  Predefined libraries typically include but are
+not limited to: STD, IEEE and WORK.  WORK is the default user library.
+</pre>
+
+<h3>Design Units and Subprograms</h3>
+<dir>
+  <li><a href="#entity"> Entity </a>
+  </li><li><a href="#arch"> Architecture </a>
+  </li><li><a href="#config"> Configuration </a>
+  </li><li><a href="#spec"> Package Declaration </a>
+  </li><li><a href="#body"> Package Body </a>
+  </li><li><a href="#subpr"> Subprograms </a>
+  </li><li><a href="#procd"> Procedure Declaration </a>
+  </li><li><a href="#procb"> Procedure Body </a>
+  </li><li><a href="#funcd"> Function Declaration </a>
+  </li><li><a href="#funcb"> Function Body </a>
+  </li><li><a href="#contx"> Context Clause </a>
+  </li><li><a href="#order"> Order of Analysis, Compilation </a>
+</li></dir>
+
+
+<h3><a name="entity"> Entity </a></h3>
+<pre>The top of every design hierarchy must be an entity.
+Entities may range from primitive circuits to complex assemblies.
+
+The entity code typically defines just the interface of the entity.
+
+  <b>entity</b>  identifier <b>is</b>
+     <b>generic</b> ( generic_variable_declarations ) ; -- optional
+     <b>port</b> ( input_and_output_variable_declarations ) ;
+     [ declarations , see allowed list below ]   -- optional
+  <b>begin</b>                                         \__ optional
+     [ statements , see allowed list below ]    /    
+  <b>end</b> <b>entity</b> identifier ;  
+
+  generic_variable_declarations are of the form:
+    variable_name : variable_type := variable_value ; -- := variable_value optional
+
+  input_and_output_variable_declaration are of the form:
+     variable_name : port_mode  variable_type ;
+  port_mode may be <b>in</b> <b>out</b> <b>inout</b> <b>buffer</b> <b>linkage</b>
+
+
+  <b>entity</b> adder <b>is</b>
+     <b>generic</b> ( N : natural := 32 ) ;
+     <b>port</b> ( A    : <b>in</b>  bit_vector(N-1 <b>downto</b> 0);
+            B    : <b>in</b>  bit_vector(N-1 <b>downto</b> 0);
+            cin  : <b>in</b>  bit;
+            Sum  : <b>out</b> bit_vector(N-1 <b>downto</b> 0);
+            Cout : <b>out</b> bit );
+  <b>end</b> <b>entity</b> adder ;
+
+
+  <b>entity</b> test_bench <b>is</b>   -- typical top level, simulatable, entity
+  <b>end</b> <b>entity</b> test_bench;
+
+
+  <b>entity</b> Latch <b>is</b>
+     <b>port</b> ( Din:  <b>in</b>  Word;
+            Dout: <b>out</b> Word;
+            Load: <b>in</b>  Bit;
+            Clk:  <b>in</b>  Bit);
+     <b>constant</b> Setup: Time := 12 ns;
+     <b>constant</b> PulseWidth: Time := 50 ns;
+     <b>use</b> WORK.TimingMonitors.<b>all</b>
+  <b>begin</b>
+     <b>assert</b> Clk='1' <b>or</b> Clk'Delayed'Stable(PulseWidth);
+     CheckTiming(Setup, Din, Load, Clk); -- passive concurrent procedure
+  <b>end entity</b> Latch;
+
+The allowed declarations are:
+  <a href="#subpr">subprogram declaration</a>
+  <a href="#subpr">subprogram body</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#Top">type declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sutype">subtype declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#cobj">constant, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sobj">signal, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#vobj">variable, object declaration - shared</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#fobj">file, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#alias">alias declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrd">attribute declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrs">attribute specification</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#disco">disconnection specification</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#groupt">group template declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+
+The allowed statements are:
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html#asse">concurrent assertion statements</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html#cpro">passive concurrent procedure call</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html#proc">passive process statement</a>
+
+</pre>
+
+<h3><a name="arch"> Architecture </a></h3>
+<pre>Used to implement a design entity. There may be more than one
+architecture for a design entity. Typical architectures fall
+into classes such as functional simulation or detailed logic
+implementation and may be structural, functional(dataflow)
+or behavioral. 
+
+  <b>architecture</b> identifier <b>of</b> entity_name <b>is</b>
+     [ declarations , see allowed list below ]
+  <b>begin</b> -- optional
+     [ statements , see allowed list below ]
+  <b>end</b> <b>architecture</b> identifier ;  
+
+
+  <b>architecture</b> circuits <b>of</b> add4c <b>is</b>
+    <b>signal</b> c : std_logic_vector(3 <b>downto</b> 0);
+    <b>component</b> fadd    -- duplicates entity port
+      <b>port</b>(a    : <b>in</b>  std_logic;
+           b    : <b>in</b>  std_logic;
+           cin  : <b>in</b>  std_logic;
+           s    : <b>out</b> std_logic;
+           cout : <b>out</b> std_logic);
+    <b>end component</b> fadd;
+  <b>begin</b>  -- circuits of add4c
+    a0: fadd <b>port map</b>(a(0), b(0), cin , sum(0), c(0));
+    a1: fadd <b>port map</b>(a(1), b(1), c(0), sum(1), c(1));
+    a2: fadd <b>port map</b>(a(2), b(2), c(1), sum(2), c(2));
+    a3: fadd <b>port map</b>(a(3), b(3), c(2), sum(3), c(3));
+    cout &lt;= (a(3) <b>and</b> b(3)) <b>or</b> ((a(3) <b>or</b> b(3)) <b>and</b>
+           ((a(2) <b>and</b> b(2)) <b>or</b> ((a(2) <b>or</b> b(2)) <b>and</b>
+           ((a(1) <b>and</b> b(1)) <b>or</b> ((a(1) <b>or</b> b(1)) <b>and</b>
+           ((a(0) <b>and</b> b(0)) <b>or</b> ((a(0) <b>or</b> b(0)) <b>and</b> cin)))))))
+           <b>after</b> 1 ns;
+  <b>end architecture</b> circuits;  -- of add4c
+
+
+The allowed declarations are:
+  <a href="#subpr">subprogram declaration</a>
+  <a href="#subpr">subprogram body</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#Top">type declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sutype">subtype declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#cobj">constant, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sobj">signal, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#vobj">variable, object declaration - shared</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#fobj">file, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#alias">alias declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#comp">component declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrd">attribute declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrs">attribute specification</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#disco">disconnection specification</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#groupt">group template declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+
+The allowed statements are:
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html#Top">concurrent statements</a>
+
+</pre>
+
+<h3><a name="config"> Configuration </a></h3>
+<pre>Used to bind component instances to design entities and
+collect architectures to make, typically, a simulatable
+test bench. One configuration could create a functional
+simulation while another configuration could create
+the complete detailed logic design. With an appropriate
+test bench the results of the two configurations
+can be compared.
+
+Note that significant nesting depth can occur on hierarchal
+designs. There is a capability to bind various architectures
+with instances of components in the hierarchy. To avoid nesting
+depth use a configuration for each architecture level and a
+configuration of configurations. Most VHDL compilation/simulation
+systems allow the top level configuration name to be elaborated
+and simulated.
+
+
+  <b>configuration</b> identifier <b>of</b> entity_name <b>is</b>
+     [ declarations , see allowed list below ]
+     [ block configuration , see allowed list below ]
+  <b>end</b> <b>architecture</b> identifier ;  
+
+
+  -- entities and architecture circuits for fadd, add4c and add32 not shown
+  <b>entity</b> add32_test <b>is</b> -- test bench
+  <b>end</b> add32_test;
+
+  <b>architecture</b> circuits <b>of</b> add32_test <b>is</b>
+     -- details implementing test bench deleted
+  <b>end architecture</b> circuits; -- of add32_test
+
+
+  <b>configuration</b> add32_test_config <b>of</b> add32_test <b>is</b>
+    <b>for</b> circuits -- of add32_test
+      <b>for all</b>: add32
+        <b>use entity</b> WORK.add32(circuits);
+        <b>for</b> circuits -- of add32
+          <b>for all</b>: add4c
+            <b>use entity</b> WORK.add4c(circuits);
+            <b>for</b> circuits -- of add4c
+              <b>for all</b>: fadd
+                <b>use entity</b> WORK.fadd(circuits);
+              <b>end for</b>;
+            <b>end for</b>;
+          <b>end for</b>;
+        <b>end for</b>;
+      <b>end for</b>;
+    <b>end for</b>;
+  <b>end configuration</b> add32_test_config;
+
+  Note the architecture name in parenthesis following the entity name.
+
+Or an equivalent configuration of configurations:
+
+  <b>configuration</b> add32_test_config <b>of</b> add32_test <b>is</b>
+    <b>for</b> circuits -- of add32_test
+      <b>for all</b>: add32
+        <b>use configuration</b> WORK.add32_config;
+      <b>end for</b>;
+    <b>end for</b>;
+  <b>end configuration</b> add32_test_config;
+
+  
+The allowed declarations are:
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrs">attribute specification</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+
+The allowed block configurations are:
+  <b>for</b> component_instance_name : component_name
+     -- use clause
+  <b>end for</b>;
+
+  <b>for all</b> : component_name
+     -- use clause
+  <b>end for</b>;
+
+use clauses are of the form:
+   <b>use entity</b> library_name.entity_name[(architecture_name)]
+   <b>use configuration</b> library_name.configuration_name
+
+</pre>
+
+<h3><a name="spec"> Package Declaration </a></h3>
+<pre>Used to declare types, shared variables, subprograms, etc.
+
+  <b>package</b> identifier <b>is</b>
+      [ declarations, see allowed list below ]
+  <b>end package</b> identifier ;
+
+  The example is included in the next section, Package Body.
+
+The allowed declarations are:
+  <a href="#subpr">subprogram declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#Top">type declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sutype">subtype declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#cobj">constant, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sobj">signal, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#vobj">variable, object declaration - shared</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#fobj">file, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#alias">alias declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#comp">component declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrd">attribute declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#attrs">attribute specification</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#groupt">group template declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+
+Declarations not allowed include:
+  subprogram body
+  
+A package body is unnecessary if no subprograms or
+deferred constants are declared in the package declaration.
+
+</pre>
+
+<h3><a name="body"> Package Body </a></h3>
+<pre>Used to implement the subprograms declared in the package declaration.
+
+  <b>package body</b> identifier <b>is</b>
+      [ declarations, see allowed list below ]
+  <b>end package body</b> identifier ;
+
+  <b>package</b> my_pkg <b>is</b> -- sample package declaration
+    <b>type</b> small <b>is</b> <b>range</b> 0 <b>to</b> 4096;
+    <b>procedure</b> s_inc(A : <b>inout</b> small);
+    <b>function</b> s_dec(B : small) <b>return</b> small;
+  <b>end</b> <b>package</b> my_pkg;
+
+  <b>package</b> <b>body</b> my_pkg <b>is</b> -- corresponding package body
+    <b>procedure</b> s_inc(A : <b>inout</b> small) <b>is</b>
+    <b>begin</b>
+    A := A+1;
+    <b>end</b> <b>procedure</b> s_inc;
+    <b>function</b> s_dec(B : small) <b>return</b> small is
+    <b>begin</b>
+      <b>return</b> B-1;
+    <b>end function</b> s_dec;
+  <b>end package body</b> my_pkg;
+
+
+The allowed declarations are:
+  <a href="#subpr">subprogram declaration</a>
+  <a href="#subpr">subprogram body</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#Top">type declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sutype">subtype declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#cobj">constant, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#vobj">variable, object declaration - shared</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#fobj">file, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#alias">alias declaration</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#groupt">group template declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+ 
+Declarations not allowed include:
+  signal, object declaration
+  
+</pre>
+
+<h3><a name="subpr"> Subprograms </a></h3>
+<pre>There are two kinds of subprograms: procedures and functions.
+
+Both procedures and functions written in VHDL must have
+a body and may have declarations. 
+
+Procedures perform sequential computations and return values
+in global objects or by storing values into formal parameters.
+
+Functions perform sequential computations and return a value
+as the value of the function.  Functions do not change their
+formal parameters.
+
+Subprograms may exist as just a procedure body or a function body.
+Subprograms may also have a procedure declarations or a
+function declaration.
+
+When subprograms are provided in a package, the subprogram declaration
+is placed in the package declaration and the subprogram body is
+placed in the package body.
+
+</pre>
+
+<h3><a name="procd"> Procedure Declaration </a></h3>
+<pre>Used to declare the calling interface to a procedure.
+
+  <b>procedure</b> identifier [ ( formal parameter list ) ] ;
+
+  <b>procedure</b> print_header ;
+  <b>procedure</b> build ( A : <b>in</b> <b>constant</b> integer;
+                    B : <b>inout</b> <b>signal</b> bit_vector;
+                    C : <b>out</b> <b>variable</b> real;
+                    D : <b>file</b> ) ;
+
+Formal parameters are separated by semicolons in the formal parameter
+list.  Each formal parameter is essentially a declaration of an
+object that is local to the procedure.  The type definitions used
+in formal parameters must be visible at the place where the procedure
+is being declared.  No semicolon follows the last formal parameter
+inside the parenthesis.
+
+Formal parameters may be constants, variables, signals or files.
+The default is variable.
+
+Formal parameters may have modes <b>in</b>, <b>inout</b> and <b>out</b>
+Files do not have a mode.
+The default is <b>in</b> .
+
+If no type is given and a mode of <b>in</b> is used, constant is the default.
+
+The equivalent default declaration of "build" is
+
+  <b>procedure</b> build ( A : <b>in</b> integer;
+                    B : <b>inout</b> <b>signal</b> bit_vector;
+                    C : <b>out</b> real;
+                    D : <b>file</b> ) ;
+
+</pre>
+
+<h3><a name="procb"> Procedure Body </a></h3>
+<pre>Used to define the implementation of the procedure.
+
+  <b>procedure</b> identifier [ ( formal parameter list ) ] <b>is</b>
+      [ declarations, see allowed list below ]
+  <b>begin</b>
+      sequential statement(s)
+  <b>end</b> <b>procedure</b> identifier ;
+
+  <b>procedure</b> print_header <b>is</b>
+      <b>use</b> STD.textio.all;
+      <b>variable</b> my_line : line; 
+  <b>begin</b>
+      write ( my_line, string'("A    B    C"));
+      writeline ( output, my_line );
+  <b>end</b> <b>procedure</b> print_header ;
+
+The procedure body formal parameter list is defined above in
+Procedure Declaration.  When a procedure declaration is used then
+the corresponding procedure body should have exactly the same
+formal parameter list.
+
+The allowed declarations are:
+  <a href="#subpr">subprogram declaration</a>
+  <a href="#subpr">subprogram body</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#Top">type declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sutype">subtype declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#cobj">constant, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#vobj">variable, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#fobj">file, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#alias">alias declaration</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#groupt">group template declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+ 
+Declarations not allowed include:
+  signal, object declaration
+ 
+</pre>
+
+<h3><a name="funcd"> Function Declaration </a></h3>
+<pre>Used to declare the calling and return interface to a function.
+
+  <b>function</b> identifier [ ( formal parameter list ) ] <b>return</b> a_type ;
+
+  <b>function</b> random <b>return</b> float ;
+  <b>function</b> is_even ( A : integer) <b>return</b> boolean ;
+
+Formal parameters are separated by semicolons in the formal parameter
+list.  Each formal parameter is essentially a declaration of an
+object that is local to the function.  The type definitions used
+in formal parameters must be visible at the place where the function
+is being declared.  No semicolon follows the last formal parameter
+inside the parenthesis.
+
+Formal parameters may be constants, signals or files.
+The default is constant.
+
+Formal parameters have the mode <b>in</b>.
+Files do not have a mode.
+Note that  <b>inout</b> and <b>out</b> are not allowed for functions.
+The default is <b>in</b> .
+
+The reserved word <b>function</b> may be preceded by nothing,
+implying <b>pure</b> , <b>pure</b> or <b>impure</b> .
+A <b>pure function</b> must not contain a reference to a file object,
+slice, subelement, shared variable or signal with attributes
+such as 'delayed, 'stable, 'quiet, 'transaction and must not
+be a parent of an impure function.
+
+</pre>
+
+<h3><a name="funcb"> Function Body </a></h3>
+<pre>Used to define the implementation of the function.
+
+  <b>function</b> identifier [ ( formal parameter list ) ]
+                  <b>return</b> a_type <b>is</b>
+      [ declarations, see allowed list below ]
+  <b>begin</b>
+      sequential statement(s)
+      return some_value; -- of type  a_type
+  <b>end</b> <b>function</b> identifier ;
+
+  <b>function</b> random <b>return</b> float <b>is</b>
+       variable X : float;
+  <b>begin</b>
+       -- compute X
+       <b>return</b> X;
+  <b>end</b> <b>function</b> random ;
+
+The function body formal parameter list is defined above in
+Function Declaration.  When a function declaration is used then
+the corresponding function body should have exactly the same
+formal parameter list.
+
+The allowed declarations are:
+  <a href="#subpr">subprogram declaration</a>
+  <a href="#subpr">subprogram body</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#Top">type declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#sutype">subtype declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#cobj">constant, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#vobj">variable, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#fobj">file, object declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#alias">alias declaration</a>
+  <a href="#usecl">use clause</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#groupt">group template declaration</a>
+  <a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html#group">group declaration</a>
+ 
+Declarations not allowed include:
+  signal, object declaration
+
+</pre>
+
+<h3><a name="contx"> Context Clause </a></h3>
+<pre>Used to name a library and make library units visible
+to the design unit that immediately follows.
+
+  <b>library</b> library_name ;
+  <b>use</b> library_name.unit_name.<b>all</b> ;
+
+  <b>library</b> STD ;
+<a name="usecl">  <b>use</b> STD.textio.<b>all</b>;</a>
+
+  <b>library</b> ieee ;
+  <b>use</b> ieee.std_logic_1164.<b>all</b>;
+  <b>use</b> ieee.std_logic_textio.<b>all</b>;
+  <b>use</b> ieee.std_logic_arith.<b>all</b>;
+  <b>use</b> ieee.numeric_std.<b>all</b>;
+  <b>use</b> ieee.numeric_bit.<b>all</b>;
+  <b>use</b> WORK.my_pkg.s_inc; -- select one item from package
+
+Note that the .<b>all</b> makes everything visible. It is
+optional and when not used the prefix such as
+   ieee.std_logic_1164.   must be used on every reference
+to an item in the library unit.  Specific items in the
+library unit may be listed in place of  .<b>all</b> .
+
+The libraries STD and WORK do not need a library specification
+on most systems.  <b>library</b> ieee or equivalent <b>library</b> IEEE
+is needed on most systems.
+
+</pre>
+
+<h3><a name="order"> Order of Analysis, Compilation </a></h3>
+<pre>Every design unit must be analyzed, compiled, before it can
+be used by another design unit. The result of the analysis
+or compilation results in an analyzed design in a library.
+The analyzed design goes into the default library WORK
+unless otherwise specified.
+
+An entity must be analyzed, compiled, before its corresponding
+architectures or configurations.
+
+A package declaration must be analyzed, compiled, before its
+corresponding package body.
+
+A package declaration must be analyzed, compiled, before it can
+be referenced in a context clause.  For example:
+
+     Analyze, compile
+          <b>package</b> my_package <b>is</b>
+            -- declarations
+          <b>end package</b> my_package;
+
+     then analyze, compile
+          <b>library</b> WORK;  -- this line usually not needed
+          <b>use</b> WORK.my_package.<b>all</b>
+          <b>entity</b> my_entity <b>is</b>
+            -- entity stuff
+          <b>end entity</b> my_entity;
+
+
+
+</pre>
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>

@@ -1,0 +1,109 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<title>VHDL Operators</title>
+</head><body>
+
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/summary.html">Summary</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/design.html">Design Units</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/sequential.html">Sequential Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/concurrent.html">Concurrent Statements</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/types.html">Predefined Types</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/declare.html">Declarations</a>
+|
+</p>
+<p>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/misc.html">Resolution and Signatures</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/reserved.html">Reserved Words</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/operator.html">Operators</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/attribute.html">Predefined Attributes</a>
+|<a href="http://www.cs.umbc.edu/portal/help/VHDL/stdpkg.html">Standard Packages</a>
+|
+</p>
+
+
+<a name="Top"></a>
+
+<h2> VHDL Operators </h2>
+<h3><pre>   Highest precedence first,
+   left to right within same precedence group,
+   use parenthesis to control order.
+   Unary operators take an operand on the right.
+   "result same" means the result is the same as the right operand.
+   Binary operators take an operand on the left and right.
+   "result same" means the result is the same as the left operand.
+</pre></h3>
+
+<pre><b>**  </b> exponentiation,  numeric <b>**</b> integer,  result numeric
+<b>abs </b> absolute value,  <b>abs</b> numeric,  result numeric
+<b>not </b> complement,      <b>not</b> logic or boolean,  result same
+
+<b>*   </b> multiplication,  numeric <b>*</b> numeric,  result numeric
+<b>/   </b> division,        numeric <b>/</b> numeric,  result numeric
+<b>mod </b> modulo,          integer <b>mod</b> integer,  result integer
+<b>rem </b> remainder,       integer <b>rem</b> integer,  result integer
+
+<b>+   </b> unary plus,      <b>+</b> numeric,  result numeric
+<b>-   </b> unary minus,     <b>-</b> numeric,  result numeric
+
+<b>+   </b> addition,        numeric <b>+</b> numeric,  result numeric
+<b>-   </b> subtraction,     numeric <b>-</b> numeric,  result numeric
+<b>&amp;   </b> concatenation,   array or element <b>&amp;</b> array or element,
+                        result array
+
+<b>sll </b> shift left logical,     logical array <b>sll</b> integer,  result same
+<b>srl </b> shift right logical,    logical array <b>srl</b> integer,  result same
+<b>sla </b> shift left arithmetic,  logical array <b>sla</b> integer,  result same
+<b>sra </b> shift right arithmetic, logical array <b>sra</b> integer,  result same
+<b>rol </b> rotate left,            logical array <b>rol</b> integer,  result same
+<b>ror </b> rotate right,           logical array <b>ror</b> integer,  result same
+
+<b>=   </b> test for equality, result is boolean
+<b>/=  </b> test for inequality, result is boolean
+<b>&lt;   </b> test for less than, result is boolean
+<b>&lt;=  </b> test for less than or equal, result is boolean
+<b>&gt;   </b> test for greater than, result is boolean
+<b>&gt;=  </b> test for greater than or equal, result is boolean
+
+<b>and </b> logical and,                logical array or boolean,  result is same
+<b>or  </b> logical or,                 logical array or boolean,  result is same
+<b>nand</b> logical complement of and,  logical array or boolean,  result is same
+<b>nor </b> logical complement of or,   logical array or boolean,  result is same
+<b>xor </b> logical exclusive or,       logical array or boolean,  result is same
+<b>xnor</b> logical complement of exclusive or,  logical array or boolean,  result is same
+
+</pre>
+
+
+
+
+
+<h3><a name="Other"> Other Links </a></h3>
+<ul>
+  <li> <a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml">
+       VHDL help page
+       </a>
+  </li><li> <a href="http://www.csee.umbc.edu/help/VHDL/samples/samples.shtml">
+       Lots of sample VHDL code, from very simple, through I/O, to complex
+       </a>
+  </li><li> <a href="http://tech-www.informatik.uni-hamburg.de/vhdl">
+       Hamburg VHDL Archive (the best set of links I have seen!)
+       </a>
+  </li><li> <a href="http://rassp.scra.org/vhdl/tools/tools.html">
+       RASSP Project VHDL Tools
+       </a>
+  </li><li> <a href="http://www.vhdl.org/">
+       VHDL Organization Home Page
+       </a>
+  </li><li> <a href="http://www.freehdl.seul.org/">
+       gnu GPL VHDL for Linux, under development
+       </a>
+  </li><li> <a href="http://www.ftlsys.com/">
+       More information on Exploration/VHDL from FTL Systems.
+       </a>
+</li></ul>
+
+<h4><a href="#Top"> Go to top </a></h4>
+<h4><a href="http://www.cs.umbc.edu/portal/help/VHDL/index.shtml"> Go to VHDL index </a></h4>
+</body></html>
