@@ -1,0 +1,23 @@
+{C:/Documents and Settings/Neo/My Documents/final/final_tb.vhd} {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Neo/My Documents/final/final_tb.vhd}
+Model Technology ModelSim PE Student Edition vcom 6.5d Compiler 2009.11 Nov 19 2009
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity sqwav
+-- Compiling architecture sqwav_arch of sqwav
+-- Compiling entity triwav
+-- Compiling architecture triwav_arch of triwav
+-- Compiling entity sawtoothwav
+-- Compiling architecture sawtoothwav_arch of sawtoothwav
+-- Compiling package sine_package
+-- Compiling package body sine_package
+-- Loading package sine_package
+-- Loading package numeric_std
+-- Loading package sine_package
+-- Compiling entity sine_wave
+-- Compiling architecture arch1 of sine_wave
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity final_tb
+-- Compiling architecture bench of final_tb
+
+} {} {}}
