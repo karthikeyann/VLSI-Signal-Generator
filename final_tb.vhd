@@ -509,25 +509,6 @@ begin
   
   sin_out<=conv_integer((wave_out));
   hi <= conv_std_logic_vector(op,8);
--------------------------------
--- this change it, bcoz wait for 5 ns will not be synthesizable.
-
---  initiate: process
---  begin
-  
-    -- initialisation code here for sine module
-
---    enable <= '0';
---    reset <= '1';
---    wait for 5 ns;
---    reset <= '0';
-
---    wait for 5 ns;
---    enable <= '1';
-
-    -- Put test bench stimulus code here
---    wait;
---end process;
   
   choice: process(select_lines,clock)
   begin
